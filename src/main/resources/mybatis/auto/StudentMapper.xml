@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fc.test.mapper.auto.StudentMapper">
+  <resultMap id="BaseResultMap" type="com.fc.test.model.auto.Student" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="tel_no" property="telNo" jdbcType="VARCHAR" />
+    <result column="student_no" property="studentNo" jdbcType="VARCHAR" />
+    <result column="college_id" property="collegeId" jdbcType="VARCHAR" />
+    <result column="college_name" property="collegeName" jdbcType="VARCHAR" />
+    <result column="classes_id" property="classesId" jdbcType="VARCHAR" />
+    <result column="classes_name" property="classesName" jdbcType="VARCHAR" />
+    <result column="bed_id" property="bedId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+<sql id="Base_Column_List" >
+	id,name,sex,tel_no,student_no,college_id,college_name,classes_id,classes_name,bed_id
+</sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fc.test.model.auto.StudentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="String" >
+    select 
+    <include refid="Base_Column_List" />
+    from student
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="String" >
+    delete from student
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.fc.test.model.auto.StudentExample" >
+    delete from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <insert id="insert" parameterType="com.fc.test.model.auto.Student" >
+    insert into student (
+      	  	       id,
+       	  	       name,
+       	  	       sex,
+       	  	       tel_no,
+       	  	       student_no,
+       	  	       college_id,
+       	  	       college_name,
+       	  	       classes_id,
+       	  	       classes_name,
+       	  	    	  bed_id
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{name,jdbcType=VARCHAR},
+       	  	      	#{sex,jdbcType=VARCHAR},
+       	  	      	#{telNo,jdbcType=VARCHAR},
+       	  	      	#{studentNo,jdbcType=VARCHAR},
+       	  	      	#{collegeId,jdbcType=VARCHAR},
+       	  	      	#{collegeName,jdbcType=VARCHAR},
+       	  	      	#{classesId,jdbcType=VARCHAR},
+       	  	      	#{classesName,jdbcType=VARCHAR},
+       	  	    	  #{bedId,jdbcType=VARCHAR}
+       	    )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.fc.test.model.auto.Student" >
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+          
+      <if test="id != null" >
+        id,
+      </if>
+      
+         
+      <if test="name != null" >
+        name,
+      </if>
+      
+         
+      <if test="sex != null" >
+        sex,
+      </if>
+      
+         
+      <if test="telNo != null" >
+        tel_no,
+      </if>
+      
+         
+      <if test="studentNo != null" >
+        student_no,
+      </if>
+      
+         
+      <if test="collegeId != null" >
+        college_id,
+      </if>
+      
+         
+      <if test="collegeName != null" >
+        college_name,
+      </if>
+      
+         
+      <if test="classesId != null" >
+        classes_id,
+      </if>
+      
+         
+      <if test="classesName != null" >
+        classes_name,
+      </if>
+      
+         
+      <if test="bedId != null" >
+        bed_id,
+      </if>
+      
+         </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+          <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+          <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+          <if test="telNo != null" >
+        #{telNo,jdbcType=VARCHAR},
+      </if>
+          <if test="studentNo != null" >
+        #{studentNo,jdbcType=VARCHAR},
+      </if>
+          <if test="collegeId != null" >
+        #{collegeId,jdbcType=VARCHAR},
+      </if>
+          <if test="collegeName != null" >
+        #{collegeName,jdbcType=VARCHAR},
+      </if>
+          <if test="classesId != null" >
+        #{classesId,jdbcType=VARCHAR},
+      </if>
+          <if test="classesName != null" >
+        #{classesName,jdbcType=VARCHAR},
+      </if>
+          <if test="bedId != null" >
+        #{bedId,jdbcType=VARCHAR},
+      </if>
+        </trim>
+  </insert>
+  
+  <select id="countByExample" parameterType="com.fc.test.model.auto.StudentExample" resultType="long" >
+    select count(*) from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <select id="findUnAssignDormStudentByHabit" resultMap="BaseResultMap">
+    SELECT s.* from habit h,student s where h.student_id = s.student_no and bed_id is null
+    ORDER BY h.student_id, h.sleep_quality, h.work_rest, h.smoke, h.eating_habits
+</select>
+  
+  <update id="updateByExampleSelective" parameterType="map" >
+    update student
+    <set >
+          <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+          <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+          <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=VARCHAR},
+      </if>
+          <if test="record.telNo != null" >
+        tel_no = #{record.telNo,jdbcType=VARCHAR},
+      </if>
+          <if test="record.studentNo != null" >
+        student_no = #{record.studentNo,jdbcType=VARCHAR},
+      </if>
+          <if test="record.collegeId != null" >
+        college_id = #{record.collegeId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.collegeName != null" >
+        college_name = #{record.collegeName,jdbcType=VARCHAR},
+      </if>
+          <if test="record.classesId != null" >
+        classes_id = #{record.classesId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.classesName != null" >
+        classes_name = #{record.classesName,jdbcType=VARCHAR},
+      </if>
+          <if test="record.bedId != null" >
+        bed_id = #{record.bedId,jdbcType=VARCHAR},
+      </if>
+         
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  
+  <update id="updateByExample" parameterType="map" >
+    update student
+    set
+            	     	 id = #{record.id,jdbcType=VARCHAR},
+    	       
+        	     	 name = #{record.name,jdbcType=VARCHAR},
+    	       
+        	     	 sex = #{record.sex,jdbcType=VARCHAR},
+    	       
+        	     	 tel_no = #{record.telNo,jdbcType=VARCHAR},
+    	       
+        	     	 student_no = #{record.studentNo,jdbcType=VARCHAR},
+    	       
+        	     	 college_id = #{record.collegeId,jdbcType=VARCHAR},
+    	       
+        	     	 college_name = #{record.collegeName,jdbcType=VARCHAR},
+    	       
+        	     	 classes_id = #{record.classesId,jdbcType=VARCHAR},
+    	       
+        	     	 classes_name = #{record.classesName,jdbcType=VARCHAR},
+    	       
+        	     	 bed_id = #{record.bedId,jdbcType=VARCHAR},
+    	       
+        <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+    <update id="updateByPrimaryKeySelective" parameterType="com.fc.test.model.auto.Student" >
+    update student
+    <set >
+                          <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+                      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+                      <if test="telNo != null" >
+        tel_no = #{telNo,jdbcType=VARCHAR},
+      </if>
+                      <if test="studentNo != null" >
+        student_no = #{studentNo,jdbcType=VARCHAR},
+      </if>
+                      <if test="collegeId != null" >
+        college_id = #{collegeId,jdbcType=VARCHAR},
+      </if>
+                      <if test="collegeName != null" >
+        college_name = #{collegeName,jdbcType=VARCHAR},
+      </if>
+                      <if test="classesId != null" >
+        classes_id = #{classesId,jdbcType=VARCHAR},
+      </if>
+                      <if test="classesName != null" >
+        classes_name = #{classesName,jdbcType=VARCHAR},
+      </if>
+                      <if test="bedId != null" >
+        bed_id = #{bedId,jdbcType=VARCHAR},
+      </if>
+              </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.fc.test.model.auto.Student" >
+    update student
+    set 
+             	        	    	 			name = #{name,jdbcType=VARCHAR}
+		     	        	    	 			sex = #{sex,jdbcType=VARCHAR}
+		     	        	    	 			tel_no = #{telNo,jdbcType=VARCHAR}
+		     	        	    	 			student_no = #{studentNo,jdbcType=VARCHAR}
+		     	        	    	 			college_id = #{collegeId,jdbcType=VARCHAR}
+		     	        	    	 			college_name = #{collegeName,jdbcType=VARCHAR}
+		     	        	    	 			classes_id = #{classesId,jdbcType=VARCHAR}
+		     	        	    	 			classes_name = #{classesName,jdbcType=VARCHAR}
+		     	        	    	 			bed_id = #{bedId,jdbcType=VARCHAR}
+		     	        where id = #{id,jdbcType=VARCHAR}
+  </update>
+   </mapper>

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.fc.test.model.auto.Habit;
+import com.fc.test.model.auto.Student;
+import com.fc.test.service.HabitService;
+import com.fc.test.service.StudentService;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,13 +22,23 @@ import com.fc.test.model.custom.PremissionThreeModelVo;
 import com.fc.test.service.SysPremissionService;
 import com.google.gson.Gson;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest(classes = SpringbootSwagger2Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = SpringbootSwagger2Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SpringbootTest {
 	@Autowired
 	private SysPremissionService sysPremissionService;
 	@Autowired
 	private PermissionDao permissionDao;
+	@Autowired
+	private HabitService habitService;
+	@Autowired
+	private StudentService studentService;
+
+	@Test
+	public void testGetUnAssignStudent() {
+		List<Student> unAssignDormStudentByHabit = studentService.findUnAssignDormStudentByHabit();
+		System.out.println(unAssignDormStudentByHabit.toString());
+	}
 	
 	public void test(){
 		/*PremissionThreeModelVo modelVo= sysPremissionService.queryThreePrem();

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fc.test.mapper.auto.BedroomMapper">
+  <resultMap id="BaseResultMap" type="com.fc.test.model.auto.Bedroom" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="bedroom_name" property="bedroomName" jdbcType="VARCHAR" />
+    <result column="people_sum_num" property="peopleSumNum" jdbcType="VARCHAR" />
+    <result column="floor" property="floor" jdbcType="VARCHAR" />
+    <result column="people_cur_num" property="peopleCurNum" jdbcType="VARCHAR" />
+    <result column="empty" property="empty" jdbcType="VARCHAR" />
+    <result column="department_id" property="departmentId" jdbcType="VARCHAR" />
+    <result column="department_name" property="departmentName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+<sql id="Base_Column_List" >
+	id,bedroom_name,people_sum_num,floor,people_cur_num,empty,department_id,department_name
+</sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fc.test.model.auto.BedroomExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from bedroom
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="String" >
+    select 
+    <include refid="Base_Column_List" />
+    from bedroom
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="String" >
+    delete from bedroom
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.fc.test.model.auto.BedroomExample" >
+    delete from bedroom
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <insert id="insert" parameterType="com.fc.test.model.auto.Bedroom" >
+    insert into bedroom (
+      	  	       id,
+       	  	       bedroom_name,
+       	  	       people_sum_num,
+       	  	       floor,
+       	  	       people_cur_num,
+       	  	       empty,
+       	  	       department_id,
+       	  	    	  department_name
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{bedroomName,jdbcType=VARCHAR},
+       	  	      	#{peopleSumNum,jdbcType=VARCHAR},
+       	  	      	#{floor,jdbcType=VARCHAR},
+       	  	      	#{peopleCurNum,jdbcType=VARCHAR},
+       	  	      	#{empty,jdbcType=VARCHAR},
+       	  	      	#{departmentId,jdbcType=VARCHAR},
+       	  	    	  #{departmentName,jdbcType=VARCHAR}
+       	    )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.fc.test.model.auto.Bedroom" >
+    insert into bedroom
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+          
+      <if test="id != null" >
+        id,
+      </if>
+      
+         
+      <if test="bedroomName != null" >
+        bedroom_name,
+      </if>
+      
+         
+      <if test="peopleSumNum != null" >
+        people_sum_num,
+      </if>
+      
+         
+      <if test="floor != null" >
+        floor,
+      </if>
+      
+         
+      <if test="peopleCurNum != null" >
+        people_cur_num,
+      </if>
+      
+         
+      <if test="empty != null" >
+        empty,
+      </if>
+      
+         
+      <if test="departmentId != null" >
+        department_id,
+      </if>
+      
+         
+      <if test="departmentName != null" >
+        department_name,
+      </if>
+      
+         </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+          <if test="bedroomName != null" >
+        #{bedroomName,jdbcType=VARCHAR},
+      </if>
+          <if test="peopleSumNum != null" >
+        #{peopleSumNum,jdbcType=VARCHAR},
+      </if>
+          <if test="floor != null" >
+        #{floor,jdbcType=VARCHAR},
+      </if>
+          <if test="peopleCurNum != null" >
+        #{peopleCurNum,jdbcType=VARCHAR},
+      </if>
+          <if test="empty != null" >
+        #{empty,jdbcType=VARCHAR},
+      </if>
+          <if test="departmentId != null" >
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+          <if test="departmentName != null" >
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+        </trim>
+  </insert>
+  
+  <select id="countByExample" parameterType="com.fc.test.model.auto.BedroomExample" resultType="String" >
+    select count(*) from bedroom
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+  <update id="updateByExampleSelective" parameterType="map" >
+    update bedroom
+    <set >
+          <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+          <if test="record.bedroomName != null" >
+        bedroom_name = #{record.bedroomName,jdbcType=VARCHAR},
+      </if>
+          <if test="record.peopleSumNum != null" >
+        people_sum_num = #{record.peopleSumNum,jdbcType=VARCHAR},
+      </if>
+          <if test="record.floor != null" >
+        floor = #{record.floor,jdbcType=VARCHAR},
+      </if>
+          <if test="record.peopleCurNum != null" >
+        people_cur_num = #{record.peopleCurNum,jdbcType=VARCHAR},
+      </if>
+          <if test="record.empty != null" >
+        empty = #{record.empty,jdbcType=VARCHAR},
+      </if>
+          <if test="record.departmentId != null" >
+        department_id = #{record.departmentId,jdbcType=VARCHAR},
+      </if>
+          <if test="record.departmentName != null" >
+        department_name = #{record.departmentName,jdbcType=VARCHAR},
+      </if>
+         
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  
+  <update id="updateByExample" parameterType="map" >
+    update bedroom
+    set
+            	     	 id = #{record.id,jdbcType=VARCHAR},
+    	       
+        	     	 bedroom_name = #{record.bedroomName,jdbcType=VARCHAR},
+    	       
+        	     	 people_sum_num = #{record.peopleSumNum,jdbcType=VARCHAR},
+    	       
+        	     	 floor = #{record.floor,jdbcType=VARCHAR},
+    	       
+        	     	 people_cur_num = #{record.peopleCurNum,jdbcType=VARCHAR},
+    	       
+        	     	 empty = #{record.empty,jdbcType=VARCHAR},
+    	       
+        	     	 department_id = #{record.departmentId,jdbcType=VARCHAR},
+    	       
+        	     	 department_name = #{record.departmentName,jdbcType=VARCHAR},
+    	       
+        <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+    <update id="updateByPrimaryKeySelective" parameterType="com.fc.test.model.auto.Bedroom" >
+    update bedroom
+    <set >
+                          <if test="bedroomName != null" >
+        bedroom_name = #{bedroomName,jdbcType=VARCHAR},
+      </if>
+                      <if test="peopleSumNum != null" >
+        people_sum_num = #{peopleSumNum,jdbcType=VARCHAR},
+      </if>
+                      <if test="floor != null" >
+        floor = #{floor,jdbcType=VARCHAR},
+      </if>
+                      <if test="peopleCurNum != null" >
+        people_cur_num = #{peopleCurNum,jdbcType=VARCHAR},
+      </if>
+                      <if test="empty != null" >
+        empty = #{empty,jdbcType=VARCHAR},
+      </if>
+                      <if test="departmentId != null" >
+        department_id = #{departmentId,jdbcType=VARCHAR},
+      </if>
+                      <if test="departmentName != null" >
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+              </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.fc.test.model.auto.Bedroom" >
+    update bedroom
+    set 
+             	        	    	 			bedroom_name = #{bedroomName,jdbcType=VARCHAR}
+		     	        	    	 			people_sum_num = #{peopleSumNum,jdbcType=VARCHAR}
+		     	        	    	 			floor = #{floor,jdbcType=VARCHAR}
+		     	        	    	 			people_cur_num = #{peopleCurNum,jdbcType=VARCHAR}
+		     	        	    	 			empty = #{empty,jdbcType=VARCHAR}
+		     	        	    	 			department_id = #{departmentId,jdbcType=VARCHAR}
+		     	        	    	 			department_name = #{departmentName,jdbcType=VARCHAR}
+		     	        where id = #{id,jdbcType=VARCHAR}
+  </update>
+   </mapper>

@@ -92,6 +92,7 @@
 						
 					 return search;
 				 }
+				 console.log("搜索条件参数：" + params);
 				 $("#dataTable").bootstrapTable("refresh", params)
 			},
 			selectColumns: function(column) {

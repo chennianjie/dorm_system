@@ -10,7 +10,7 @@ fuce:
   profile: D:/profile/
 #tomcat config
 server :
-  port : 8080
+  port : 8081
   ##项目名字配置
   #servlet : 
   #  context-path : /demo

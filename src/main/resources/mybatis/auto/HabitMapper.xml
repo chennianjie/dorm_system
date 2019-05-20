@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fc.test.mapper.auto.HabitMapper">
+  <resultMap id="BaseResultMap" type="com.fc.test.model.auto.Habit" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="eating_habits" property="eatingHabits" jdbcType="VARCHAR" />
+    <result column="work_rest" property="workRest" jdbcType="VARCHAR" />
+    <result column="smoke" property="smoke" jdbcType="VARCHAR" />
+    <result column="sleep_quality" property="sleepQuality" jdbcType="VARCHAR" />
+    <result column="student_id" property="studentId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+<sql id="Base_Column_List" >
+	id,eating_habits,work_rest,smoke,sleep_quality,student_id
+</sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fc.test.model.auto.HabitExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from habit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+
+
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="String" >
+    select 
+    <include refid="Base_Column_List" />
+    from habit
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="String" >
+    delete from habit
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="com.fc.test.model.auto.HabitExample" >
+    delete from habit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <insert id="insert" parameterType="com.fc.test.model.auto.Habit" >
+    insert into habit (
+      	  	       id,
+       	  	       eating_habits,
+       	  	       work_rest,
+       	  	       smoke,
+       	  	       sleep_quality,
+       	  	    	  student_id
+       	    )
+    values (
+	  	  	      	#{id,jdbcType=VARCHAR},
+       	  	      	#{eatingHabits,jdbcType=VARCHAR},
+       	  	      	#{workRest,jdbcType=VARCHAR},
+       	  	      	#{smoke,jdbcType=VARCHAR},
+       	  	      	#{sleepQuality,jdbcType=VARCHAR},
+       	  	    	  #{studentId,jdbcType=VARCHAR}
+       	    )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.fc.test.model.auto.Habit" >
+    insert into habit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+          
+      <if test="id != null" >
+        id,
+      </if>
+      
+         
+      <if test="eatingHabits != null" >
+        eating_habits,
+      </if>
+      
+         
+      <if test="workRest != null" >
+        work_rest,
+      </if>
+      
+         
+      <if test="smoke != null" >
+        smoke,
+      </if>
+      
+         
+      <if test="sleepQuality != null" >
+        sleep_quality,
+      </if>
+      
+         
+      <if test="studentId != null" >
+        student_id,
+      </if>
+      
+         </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+          <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+          <if test="eatingHabits != null" >
+        #{eatingHabits,jdbcType=VARCHAR},
+      </if>
+          <if test="workRest != null" >
+        #{workRest,jdbcType=VARCHAR},
+      </if>
+          <if test="smoke != null" >
+        #{smoke,jdbcType=VARCHAR},
+      </if>
+          <if test="sleepQuality != null" >
+        #{sleepQuality,jdbcType=VARCHAR},
+      </if>
+          <if test="studentId != null" >
+        #{studentId,jdbcType=VARCHAR},
+      </if>
+        </trim>
+  </insert>
+  
+  <select id="countByExample" parameterType="com.fc.test.model.auto.HabitExample" resultType="Long" >
+    select count(*) from habit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+  <update id="updateByExampleSelective" parameterType="map" >
+    update habit
+    <set >
+          <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+          <if test="record.eatingHabits != null" >
+        eating_habits = #{record.eatingHabits,jdbcType=VARCHAR},
+      </if>
+          <if test="record.workRest != null" >
+        work_rest = #{record.workRest,jdbcType=VARCHAR},
+      </if>
+          <if test="record.smoke != null" >
+        smoke = #{record.smoke,jdbcType=VARCHAR},
+      </if>
+          <if test="record.sleepQuality != null" >
+        sleep_quality = #{record.sleepQuality,jdbcType=VARCHAR},
+      </if>
+          <if test="record.studentId != null" >
+        student_id = #{record.studentId,jdbcType=VARCHAR},
+      </if>
+         
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+  
+  <update id="updateByExample" parameterType="map" >
+    update habit
+    set
+            	     	 id = #{record.id,jdbcType=VARCHAR},
+    	       
+        	     	 eating_habits = #{record.eatingHabits,jdbcType=VARCHAR},
+    	       
+        	     	 work_rest = #{record.workRest,jdbcType=VARCHAR},
+    	       
+        	     	 smoke = #{record.smoke,jdbcType=VARCHAR},
+    	       
+        	     	 sleep_quality = #{record.sleepQuality,jdbcType=VARCHAR},
+    	       
+        	     	 student_id = #{record.studentId,jdbcType=VARCHAR},
+    	       
+        <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+    <update id="updateByPrimaryKeySelective" parameterType="com.fc.test.model.auto.Habit" >
+    update habit
+    <set >
+                          <if test="eatingHabits != null" >
+        eating_habits = #{eatingHabits,jdbcType=VARCHAR},
+      </if>
+                      <if test="workRest != null" >
+        work_rest = #{workRest,jdbcType=VARCHAR},
+      </if>
+                      <if test="smoke != null" >
+        smoke = #{smoke,jdbcType=VARCHAR},
+      </if>
+                      <if test="sleepQuality != null" >
+        sleep_quality = #{sleepQuality,jdbcType=VARCHAR},
+      </if>
+                      <if test="studentId != null" >
+        student_id = #{studentId,jdbcType=VARCHAR},
+      </if>
+              </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.fc.test.model.auto.Habit" >
+    update habit
+    set 
+             	        	    	 			eating_habits = #{eatingHabits,jdbcType=VARCHAR}
+		     	        	    	 			work_rest = #{workRest,jdbcType=VARCHAR}
+		     	        	    	 			smoke = #{smoke,jdbcType=VARCHAR}
+		     	        	    	 			sleep_quality = #{sleepQuality,jdbcType=VARCHAR}
+		     	        	    	 			student_id = #{studentId,jdbcType=VARCHAR}
+		     	        where id = #{id,jdbcType=VARCHAR}
+  </update>
+   </mapper>
