@@ -25,12 +25,7 @@
 				<div class="body-nest" id="element">
 					<div class="panel-body">
 						<form  class="form-horizontal m" id="form-add">
-													<div class="form-group">
-										<label class="col-sm-3 control-label ">床位号：</label>
-										<div class="col-sm-8">
-											<input class="form-control" type="text" id="bedNum" name="bedNum"/>
-										</div>
-									</div>
+
 									<div class="form-group">
 										<label class="col-sm-3 control-label ">公寓名字：</label>
 										<div class="col-sm-8">
@@ -45,6 +40,20 @@
 											<select class="form-control" id="bedroomName" name="bedroomName"></select>
 										</div>
 									</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label ">床位号：</label>
+								<div class="col-sm-8">
+									<!--<input class="form-control" type="text" id="bedNum" name="bedNum"/>-->
+									<select class="form-control" id="bedNum" name="bedNum"></select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label ">学号：</label>
+								<div class="col-sm-8">
+									<!--<input class="form-control" type="text" id="studentNo" name="studentNo"/>-->
+									<select class="form-control" id="studentNo" name="studentNo"></select>
+								</div>
+							</div>
 										<div class="form-group">
 								<div class="form-control-static col-sm-offset-9">
 									<button type="submit" class="btn btn-primary">提交</button>
@@ -87,7 +96,8 @@ $(function(){
 	        initialDate:new Date(),
 	        minView: 1      
 	    });
-	
+    initDepartment();
+    initStudent();
 })
 
 /**
@@ -116,15 +126,16 @@ function initDepartment(){
 }
 
 /**
- * 级联初始化寝室下拉
+ * 级联初始化为住满寝室下拉
  */
 $("#departmentName").change(function() {
+    $("#bedroomName").empty();
     var id = $("#departmentName").val();
     console.log(id);
     $.ajax({
         cache : true,
         type : "GET",
-        url : rootPath + "/BedroomController/listByDepartmentId/" + id,
+        url : rootPath + "/BedroomController/listByDepartmentIdAndNotFull/" + id,
         async : false,
         error : function(request) {
             $.modal.alertError("系统错误");
@@ -146,22 +157,22 @@ $("#departmentName").change(function() {
 /**
  * 级联初始化床位号下拉
  */
-$("#departmentName").change(function() {
-    var id = $("#departmentName").val();
+$("#bedroomName").change(function() {
+    var id = $("#bedroomName").val();
     console.log(id);
     $.ajax({
         cache : true,
         type : "GET",
-        url : rootPath + "/BedroomController/listByDepartmentId/" + id,
+        url : rootPath + "/BedController/listByBedroomIdAndEmpty/" + id,
         async : false,
         error : function(request) {
             $.modal.alertError("系统错误");
         },
         success : function(data) {
             var name,id,option;
-            var bedroomSel = $("#bedroomName");
+            var bedroomSel = $("#bedNum");
             for (var i = 0; i < data.length; i++) {
-                name = data[i].bedroomName;
+                name = data[i].bedNum;
                 id = data[i].id;
                 option = new Option(name, id)
                 bedroomSel.append(option);
@@ -169,6 +180,30 @@ $("#departmentName").change(function() {
         }
     });
 });
+/**
+ * 初始化未分寝室学生下拉
+ */
+function initStudent(){
+    $.ajax({
+        cache : true,
+        type : "GET",
+        url : rootPath + "/StudentController/listByBedroomId",
+        async : false,
+        error : function(request) {
+            $.modal.alertError("系统错误");
+        },
+        success : function(data) {
+            var name,id,option;
+            var deparmentSel = $("#studentNo");
+            for (var i = 0; i < data.length; i++) {
+                name = data[i].studentNo;
+                id = data[i].studentNo;
+                option = new Option(name, id)
+                deparmentSel.append(option);
+            }
+        }
+    });
+}
 
 
 $("#form-add").validate({

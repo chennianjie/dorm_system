@@ -12,6 +12,9 @@
     <result column="classes_id" property="classesId" jdbcType="VARCHAR" />
     <result column="classes_name" property="classesName" jdbcType="VARCHAR" />
     <result column="bed_id" property="bedId" jdbcType="VARCHAR" />
+    <result column="bed_num" property="bedNum" jdbcType="VARCHAR" />
+    <result column="bedroom_name" property="bedroomName" jdbcType="VARCHAR" />
+    <result column="department_name" property="departmentName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -72,7 +75,7 @@
     </where>
   </sql>
 <sql id="Base_Column_List" >
-	id,name,sex,tel_no,student_no,college_id,college_name,classes_id,classes_name,bed_id
+	id,name,sex,tel_no,student_no,college_id,college_name,classes_id,classes_name,bed_id,bed_num,bedroom_name,department_name
 </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fc.test.model.auto.StudentExample" >
     select
@@ -118,7 +121,10 @@
        	  	       college_name,
        	  	       classes_id,
        	  	       classes_name,
-       	  	    	  bed_id
+       	  	       bed_id,
+       	  	       bed_num,
+       	  	       bedroom_name,
+       	  	    	  department_name
        	    )
     values (
 	  	  	      	#{id,jdbcType=VARCHAR},
@@ -130,7 +136,10 @@
        	  	      	#{collegeName,jdbcType=VARCHAR},
        	  	      	#{classesId,jdbcType=VARCHAR},
        	  	      	#{classesName,jdbcType=VARCHAR},
-       	  	    	  #{bedId,jdbcType=VARCHAR}
+       	  	      	#{bedId,jdbcType=VARCHAR},
+       	  	      	#{bedNum,jdbcType=VARCHAR},
+       	  	      	#{bedroomName,jdbcType=VARCHAR},
+       	  	    	  #{departmentName,jdbcType=VARCHAR}
        	    )
   </insert>
   
@@ -187,6 +196,21 @@
         bed_id,
       </if>
       
+         
+      <if test="bedNum != null" >
+        bed_num,
+      </if>
+      
+         
+      <if test="bedroomName != null" >
+        bedroom_name,
+      </if>
+      
+         
+      <if test="departmentName != null" >
+        department_name,
+      </if>
+      
          </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
           <if test="id != null" >
@@ -219,6 +243,15 @@
           <if test="bedId != null" >
         #{bedId,jdbcType=VARCHAR},
       </if>
+          <if test="bedNum != null" >
+        #{bedNum,jdbcType=VARCHAR},
+      </if>
+          <if test="bedroomName != null" >
+        #{bedroomName,jdbcType=VARCHAR},
+      </if>
+          <if test="departmentName != null" >
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
         </trim>
   </insert>
   
@@ -233,7 +266,7 @@
     SELECT s.* from habit h,student s where h.student_id = s.student_no and bed_id is null
     ORDER BY h.student_id, h.sleep_quality, h.work_rest, h.smoke, h.eating_habits
 </select>
-  
+
   <update id="updateByExampleSelective" parameterType="map" >
     update student
     <set >
@@ -267,6 +300,15 @@
           <if test="record.bedId != null" >
         bed_id = #{record.bedId,jdbcType=VARCHAR},
       </if>
+          <if test="record.bedNum != null" >
+        bed_num = #{record.bedNum,jdbcType=VARCHAR},
+      </if>
+          <if test="record.bedroomName != null" >
+        bedroom_name = #{record.bedroomName,jdbcType=VARCHAR},
+      </if>
+          <if test="record.departmentName != null" >
+        department_name = #{record.departmentName,jdbcType=VARCHAR},
+      </if>
          
     </set>
     <if test="_parameter != null" >
@@ -297,6 +339,12 @@
         	     	 classes_name = #{record.classesName,jdbcType=VARCHAR},
     	       
         	     	 bed_id = #{record.bedId,jdbcType=VARCHAR},
+    	       
+        	     	 bed_num = #{record.bedNum,jdbcType=VARCHAR},
+    	       
+        	     	 bedroom_name = #{record.bedroomName,jdbcType=VARCHAR},
+    	       
+        	     	 department_name = #{record.departmentName,jdbcType=VARCHAR},
     	       
         <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -333,6 +381,15 @@
                       <if test="bedId != null" >
         bed_id = #{bedId,jdbcType=VARCHAR},
       </if>
+                      <if test="bedNum != null" >
+        bed_num = #{bedNum,jdbcType=VARCHAR},
+      </if>
+                      <if test="bedroomName != null" >
+        bedroom_name = #{bedroomName,jdbcType=VARCHAR},
+      </if>
+                      <if test="departmentName != null" >
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
               </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -349,6 +406,9 @@
 		     	        	    	 			classes_id = #{classesId,jdbcType=VARCHAR}
 		     	        	    	 			classes_name = #{classesName,jdbcType=VARCHAR}
 		     	        	    	 			bed_id = #{bedId,jdbcType=VARCHAR}
+		     	        	    	 			bed_num = #{bedNum,jdbcType=VARCHAR}
+		     	        	    	 			bedroom_name = #{bedroomName,jdbcType=VARCHAR}
+		     	        	    	 			department_name = #{departmentName,jdbcType=VARCHAR}
 		     	        where id = #{id,jdbcType=VARCHAR}
   </update>
    </mapper>

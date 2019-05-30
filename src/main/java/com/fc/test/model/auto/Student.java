@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * 
  * @author fuce
  * @email 87766867@qq.com
- * @date 2019-05-18 21:58:42
+ * @date 2019-05-27 16:02:58
  */
 public class Student implements Serializable {
 
@@ -64,6 +64,21 @@ public class Student implements Serializable {
 	 * 是否分配床位，为空表示未分配
 	 */
 		private String bedId;
+		
+	/**
+	 * 
+	 */
+		private String bedNum;
+		
+	/**
+	 * 
+	 */
+		private String bedroomName;
+		
+	/**
+	 * 
+	 */
+		private String departmentName;
 	
 	
 			
@@ -154,6 +169,33 @@ public class Student implements Serializable {
 	
 	    public void setBedId(String bedId){
 	        this.bedId = bedId == null ? null : bedId.trim();
+	    }
+			
+				
+		public String getBedNum() {
+	        return bedNum;
+	    }
+	
+	    public void setBedNum(String bedNum){
+	        this.bedNum = bedNum == null ? null : bedNum.trim();
+	    }
+			
+				
+		public String getBedroomName() {
+	        return bedroomName;
+	    }
+	
+	    public void setBedroomName(String bedroomName){
+	        this.bedroomName = bedroomName == null ? null : bedroomName.trim();
+	    }
+			
+				
+		public String getDepartmentName() {
+	        return departmentName;
+	    }
+	
+	    public void setDepartmentName(String departmentName){
+	        this.departmentName = departmentName == null ? null : departmentName.trim();
 	    }
 			
 			

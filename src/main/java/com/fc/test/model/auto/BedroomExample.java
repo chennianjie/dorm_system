@@ -549,6 +549,11 @@ public class BedroomExample {
             return (Criteria) this;
         }
 
+        public Criteria andBedroomNotFull() {
+            addCriterion("people_cur_num <= people_sum_num");
+            return (Criteria) this;
+        }
+
         public Criteria andDepartmentIdEqualTo(String value) {
             addCriterion("department_id =", value, "departmentId");
             return (Criteria) this;

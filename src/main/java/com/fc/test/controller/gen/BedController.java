@@ -1,7 +1,10 @@
 package com.fc.test.controller.gen;
 
+import com.fc.test.model.auto.BedExample;
 import com.fc.test.model.auto.Student;
+import com.fc.test.service.BedroomService;
 import com.fc.test.service.StudentService;
+import com.fc.test.util.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,8 @@ public class BedController extends BaseController{
 	private BedService bedService;
 	@Autowired
 	private StudentService studentService;
+	@Autowired
+	private BedroomService bedroomService;
 
 
 	@GetMapping("view")
@@ -58,9 +63,18 @@ public class BedController extends BaseController{
 		TableSplitResult<Bed> result=new TableSplitResult<Bed>(page.getPageNum(), page.getTotal(), page.getList()); 
 		return  result;
 	}
-	
+	@GetMapping("listByBedroomId/{id}")
+	@ResponseBody
+	public Object listByDepartmentId(@PathVariable String id){
+		BedExample bedExample = new BedExample();
+		bedExample.createCriteria().andBedroomIdEqualTo(id);
+		return bedService.selectByExample(bedExample);
+	}
+
+
+
 	/**
-     * 新增
+     * 新增    改成自选床位功能
      */
     @GetMapping("/add")
     public String add(ModelMap modelMap)
@@ -73,12 +87,31 @@ public class BedController extends BaseController{
 	@RequiresPermissions("gen:bed:add")
 	@ResponseBody
 	public AjaxResult add(Bed bed,Model model){
-		int b=bedService.insertSelective(bed);
-		if(b>0){
-			return success();
-		}else{
-			return error();
+		if (StringUtils.isEmpty(bed.getDepartmentId())){
+			return error(300,"请选择公寓");
 		}
+    	if (StringUtils.isEmpty(bed.getBedroomId())){
+    		return error(400,"请选择宿舍");
+		}
+		if (StringUtils.isEmpty(bed.getBedNum())){
+			return error(500,"请选择床位");
+		}
+		if (StringUtils.isEmpty(bed.getStudentNo())){
+			return error(600,"请选择学生");
+		}
+		//更新床位信息，如果以前学生有床位，则以前的床位置为空并设置新选择的床位
+		String bedId = bed.getBedNum();
+		Bed bed1 = new Bed();
+		bed1.setId(bedId);
+		bed1.setEmpty("N");
+		bedService.updateByPrimaryKeySelective(bed1);
+		//更新学生信息
+		Student student = studentService.selectByStudentNo(bed.getStudentNo());
+		student.setBedId(bedId);
+		studentService.updateByPrimaryKeySelective(student);
+		//更新相关宿舍信息
+		bedroomService.updatePeopleCurNumWhenAssign(bed.getBedroomId());
+		return success();//200
 	}
 	
 	/**
@@ -148,7 +181,9 @@ public class BedController extends BaseController{
 	@PostMapping("/assignDorm")
 	@ResponseBody
 	public Object assignDorm(){
+		//找出所有空宿舍
 		List<Bed> beds = bedService.selectEmptyBed();
+		//通过习惯表找出未分配宿舍的学生
 		List<Student> students = studentService.findUnAssignDormStudentByHabit();
 		if (beds == null || beds.size() == 0 || students.size() == 0 || students == null) {
 			return success();
@@ -158,11 +193,18 @@ public class BedController extends BaseController{
 		Bed bed;
 		for (int i = 0; i < size; i++) {
 			student = students.get(i);
-			student.setBedId(beds.get(i).getId());
-			studentService.updateByPrimaryKeySelective(student);
 			bed = beds.get(i);
+			student.setBedId(bed.getId());
+			student.setBedNum(bed.getBedNum());
+			student.setBedroomName(bed.getBedroomName());
+			student.setDepartmentName(bed.getDepartmentName());
+			//更新学生信息
+			studentService.updateByPrimaryKeySelective(student);
 			bed.setEmpty("N");
+			//更新床位信息
 			bedService.updateByPrimaryKeySelective(bed);
+			//更新宿舍信息
+			bedroomService.updatePeopleCurNumWhenAssign(bed.getBedroomId());
 		}
 		HashMap<String, Integer> map = new HashMap<>();
 		map.put("unAssignStudent", studentService.findUnAssignDormStudentByHabit().size());

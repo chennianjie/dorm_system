@@ -51,7 +51,7 @@
                                     </a>
                                 </div>
                                 <div class="titleToggle">
-                                    <a class="nav-toggle-alt" href="#search_div" >
+                                    <a class="nav-toggle-alt" href="#departmentId" >
                                         <span class="entypo-down-open"></span>
                                     </a>
                                 </div>
@@ -62,23 +62,7 @@
                                     <form role="form" class="form-inline">
                                         <div class="form-group">
                                             <label for="exampleInputEmail2" class="sr-only">搜索名字</label>
-                                            <input id="exampleInputEmail2" type="text" name="searchTxt" placeholder="搜索名字"class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <select id="sexSelect" type="" name="sex" class="form-control">
-                                                <option value="">性别</option>
-                                                <option value="男">男</option>
-                                                <option value="女">女</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <select id="departmentNameSelect" type="" name="departmentName" class="form-control">
-
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail" class="sr-only">搜索宿舍名</label>
-                                            <input id="exampleInputEmail" type="text" name="bedroomName" placeholder="搜索宿舍名"class="form-control">
+                                            <input type="text" name="searchTxt" placeholder="搜索名字"class="form-control">
                                         </div>
                                         <button onclick="$.table.search(this)" class="btn btn-success" type="button"><i class="fa fa-search"></i>&nbsp;搜索</button>
                                     </form>
@@ -105,13 +89,13 @@
                         <div class="body-nest" id="Blank_Page_Content">
                             <!-- 工具条 -->
                             <div class="btn-group hidden-xs" id="exampleTableEventsToolbar" role="group">
-                            	<button onclick="$.operate.add()" type="button" class="btn btn-primary">
-                                    <span class="entypo-plus-squared"></span>&nbsp;&nbsp;新增
+                            	<button id="daka" type="button" class="btn btn-primary">
+                                    <span class="entypo-plus-squared"></span>&nbsp;&nbsp;打卡
                                 </button>
                                <button onclick="$.operate.batRemove()" type="button" class="btn btn-info">
                                     <span class="entypo-trash"></span>&nbsp;&nbsp;删除
                                </button>
-                               
+
                            </div>
                             <!-- 工具条 end-->
                            <table id="dataTable" class="table-striped footable-res footable metro-blue" data-page-size="6">
@@ -169,11 +153,11 @@
 <!-- jquery-export 表格导出插件 -->
 
 <!-- 导出 -->
-var dataUrl=window.rootPath+"/StudentController/list";
-var removeUrl=window.rootPath+"/StudentController/remove";
-var createUrl=window.rootPath+"/StudentController/add";
-var updateUrl=window.rootPath+"/StudentController/edit/{id}";
-var exportUrl=window.rootPath+"/StudentController/export";
+var dataUrl=window.rootPath+"/PunchclockController/list";
+var removeUrl=window.rootPath+"/PunchclockController/remove";
+var createUrl=window.rootPath+"/PunchclockController/add";
+var updateUrl=window.rootPath+"/PunchclockController/edit/{id}";
+var exportUrl=window.rootPath+"/PunchclockController/export";
   var options = {
 		dataUrl: dataUrl,
         createUrl: createUrl,
@@ -181,7 +165,7 @@ var exportUrl=window.rootPath+"/StudentController/export";
         removeUrl:removeUrl,
         exportUrl: exportUrl,
         sortName: "roleSort",
-        modalName: "学生",
+        modalName: "",
         search: false,
 	   dataColumns: [
 			{
@@ -192,40 +176,24 @@ var exportUrl=window.rootPath+"/StudentController/export";
 			    title: '主键'
 			},
 			{
-			    field: 'name',
-			    title: '学生名字'
-			},
-			{
-			    field: 'sex',
-			    title: '性别'
-			},
-			{
-			    field: 'telNo',
-			    title: '电话'
-			},
-			{
 			    field: 'studentNo',
 			    title: '学号'
 			},
 			{
-			    field: 'collegeName',
-			    title: '所属学院名'
+			    field: 'studentName',
+			    title: '姓名'
 			},
 			{
-			    field: 'classesName',
-			    title: '所在班级名称'
+			    field: 'punchTime',
+			    title: '打卡时间'
 			},
 			{
-			    field: 'bedNum',
-			    title: '床位号'
+			    field: 'ip',
+			    title: 'ip地址'
 			},
 			{
-			    field: 'bedroomName',
-			    title: '宿舍'
-			},
-			{
-			    field: 'departmentName',
-			    title: '公寓'
+			    field: 'address',
+			    title: '打卡地点'
 			},
 
 /*	
@@ -260,32 +228,50 @@ var exportUrl=window.rootPath+"/StudentController/export";
 $(function(){
 	var oTab=$.table.oTableInit(options);
 	oTab.Init();
-    initDepartmentSelect();
 })
 
-/**
- * 初始化公寓下拉列表
- */
-function initDepartmentSelect() {
+$("#daka").click(function daka(){
+    //获取城市ajax
     $.ajax({
-        cache : true,
-        type : "POST",
-        url : rootPath + "/DepartmentController/list2",
-        async : false,
-        error : function(request) {
-            $.modal.alertError("系统错误");
-        },
-        success : function(data) {
-            var name,id,option;
-            var deparmentSel = $("#departmentNameSelect");
-            for (var i = 0; i < data.length; i++) {
-                name = data[i].departmentName;
-                id = data[i].id;
-                option = new Option(name, name)
-                deparmentSel.append(option);
-            }
+        url: 'http://ip-api.com/json',
+        type: 'POST',
+        dataType: 'jsonp',
+        success:function(data) {
+             console.log(JSON.stringify(data));
+            punch_clock(JSON.stringify(data))
         }
     });
+})
+
+function punch_clock(loginInfo) {
+    /*console.log("====>"+loginInfo)*/
+    var a = JSON.parse(loginInfo);
+    var url = '/PunchclockController/punch/';
+
+    $.ajax({
+        url:url,
+        type: 'post',
+        data: {
+            ipFrom3: a["query"],
+            lati: a["lat"],
+            longi: a["lon"],
+            city: a["city"],
+        },
+        dateTye:'text',
+        success: function (data) {
+            //-1:不在打卡范围内，0:今天已经打过卡，1：打卡成功
+            console.log(data)
+            if(data.code == -1) {
+                alert("不在打卡范围内")
+            }else if (data.code == 1){
+                alert("今天已经打过卡")
+            }else {
+                alert("打卡成功")
+            }
+            data.code = 200;
+            $.operate.ajaxSuccess(data);
+        }
+    })
 }
 </script>
 

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fc.test.mapper.auto.PunchclockMapper">
-  <resultMap id="BaseResultMap" type="com.fc.test.model.auto.Punchclock" >
+<mapper namespace="com.fc.test.mapper.auto.NotificationMapper">
+  <resultMap id="BaseResultMap" type="com.fc.test.model.auto.Notification" >
     <result column="id" property="id" jdbcType="VARCHAR" />
-    <result column="student_no" property="studentNo" jdbcType="VARCHAR" />
-    <result column="student_name" property="studentName" jdbcType="VARCHAR" />
-    <result column="punch_time" property="punchTime" jdbcType="VARCHAR" />
-    <result column="ip" property="ip" jdbcType="VARCHAR" />
-    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="permission" property="permission" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,15 +67,15 @@
     </where>
   </sql>
 <sql id="Base_Column_List" >
-	id,student_no,student_name,punch_time,ip,address
+	id,content,create_time,user_id,permission
 </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fc.test.model.auto.PunchclockExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fc.test.model.auto.NotificationExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from punchclock
+    from notification
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -84,56 +83,44 @@
       order by ${orderByClause}
     </if>
   </select>
-
-  <select id="findToday" resultMap="BaseResultMap" parameterType="String" >
-    SELECT
-    <include refid="Base_Column_List" />
-  FROM punchclock
-  where student_no = #{studentId,jdbcType=VARCHAR}
-  and to_days(punch_time) = to_days(SYSDATE())
-  limit 1
-  </select>
-
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="String" >
     select 
     <include refid="Base_Column_List" />
-    from punchclock
+    from notification
     where id = #{id,jdbcType=VARCHAR}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="String" >
-    delete from punchclock
+    delete from notification
     where id = #{id,jdbcType=VARCHAR}
   </delete>
 
-  <delete id="deleteByExample" parameterType="com.fc.test.model.auto.PunchclockExample" >
-    delete from punchclock
+  <delete id="deleteByExample" parameterType="com.fc.test.model.auto.NotificationExample" >
+    delete from notification
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   
-  <insert id="insert" parameterType="com.fc.test.model.auto.Punchclock" >
-    insert into punchclock (
+  <insert id="insert" parameterType="com.fc.test.model.auto.Notification" >
+    insert into notification (
       	  	       id,
-       	  	       student_no,
-       	  	       student_name,
-       	  	       punch_time,
-       	  	       ip,
-       	  	    	  address
+       	  	       content,
+       	  	       create_time,
+       	  	       user_id,
+       	  	    	  permission
        	    )
     values (
 	  	  	      	#{id,jdbcType=VARCHAR},
-       	  	      	#{studentNo,jdbcType=VARCHAR},
-       	  	      	#{studentName,jdbcType=VARCHAR},
-       	  	      	#{punchTime,jdbcType=VARCHAR},
-       	  	      	#{ip,jdbcType=VARCHAR},
-       	  	    	  #{address,jdbcType=VARCHAR}
+       	  	      	#{content,jdbcType=VARCHAR},
+       	  	      	#{createTime,jdbcType=TIMESTAMP},
+       	  	      	#{userId,jdbcType=VARCHAR},
+       	  	    	  #{permission,jdbcType=VARCHAR}
        	    )
   </insert>
   
-  <insert id="insertSelective" parameterType="com.fc.test.model.auto.Punchclock" >
-    insert into punchclock
+  <insert id="insertSelective" parameterType="com.fc.test.model.auto.Notification" >
+    insert into notification
     <trim prefix="(" suffix=")" suffixOverrides="," >
           
       <if test="id != null" >
@@ -141,28 +128,23 @@
       </if>
       
          
-      <if test="studentNo != null" >
-        student_no,
-      </if>
-      
-         
-      <if test="studentName != null" >
-        student_name,
+      <if test="content != null" >
+        content,
       </if>
       
          
 
-        punch_time,
+        create_time,
 
       
          
-      <if test="ip != null" >
-        ip,
+      <if test="userId != null" >
+        user_id,
       </if>
       
          
-      <if test="address != null" >
-        address,
+      <if test="permission != null" >
+        permission,
       </if>
       
          </trim>
@@ -170,52 +152,45 @@
           <if test="id != null" >
         #{id,jdbcType=VARCHAR},
       </if>
-          <if test="studentNo != null" >
-        #{studentNo,jdbcType=VARCHAR},
+          <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
       </if>
-          <if test="studentName != null" >
-        #{studentName,jdbcType=VARCHAR},
-      </if>
-          <if test="punchTime != null" >
-        #{punchTime,jdbcType=VARCHAR},
-      </if>
+
         now(),
-          <if test="ip != null" >
-        #{ip,jdbcType=VARCHAR},
+
+          <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
       </if>
-          <if test="address != null" >
-        #{address,jdbcType=VARCHAR},
+          <if test="permission != null" >
+        #{permission,jdbcType=VARCHAR},
       </if>
         </trim>
   </insert>
   
-  <select id="countByExample" parameterType="com.fc.test.model.auto.PunchclockExample" resultType="String" >
-    select count(*) from punchclock
+  <select id="countByExample" parameterType="com.fc.test.model.auto.NotificationExample" resultType="String" >
+    select count(*) from notification
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   
   <update id="updateByExampleSelective" parameterType="map" >
-    update punchclock
+    update notification
     <set >
           <if test="record.id != null" >
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-          <if test="record.studentNo != null" >
-        student_no = #{record.studentNo,jdbcType=VARCHAR},
+          <if test="record.content != null" >
+        content = #{record.content,jdbcType=VARCHAR},
       </if>
-          <if test="record.studentName != null" >
-        student_name = #{record.studentName,jdbcType=VARCHAR},
+          <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-          <if test="record.punchTime != null" >
-        punch_time = #{record.punchTime,jdbcType=VARCHAR},
+          <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=VARCHAR},
       </if>
-          <if test="record.ip != null" >
-        ip = #{record.ip,jdbcType=VARCHAR},
-      </if>
-          <if test="record.address != null" >
-        address = #{record.address,jdbcType=VARCHAR},
+          <if test="record.permission != null" >
+        permission = #{record.permission,jdbcType=VARCHAR},
       </if>
          
     </set>
@@ -226,55 +201,49 @@
   
   
   <update id="updateByExample" parameterType="map" >
-    update punchclock
+    update notification
     set
             	     	 id = #{record.id,jdbcType=VARCHAR},
     	       
-        	     	 student_no = #{record.studentNo,jdbcType=VARCHAR},
+        	     	 content = #{record.content,jdbcType=VARCHAR},
     	       
-        	     	 student_name = #{record.studentName,jdbcType=VARCHAR},
+        	     	 create_time = #{record.createTime,jdbcType=TIMESTAMP},
     	       
-        	     	 punch_time = #{record.punchTime,jdbcType=VARCHAR},
+        	     	 user_id = #{record.userId,jdbcType=VARCHAR},
     	       
-        	     	 ip = #{record.ip,jdbcType=VARCHAR},
-    	       
-        	     	 address = #{record.address,jdbcType=VARCHAR},
+        	     	 permission = #{record.permission,jdbcType=VARCHAR},
     	       
         <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   
-    <update id="updateByPrimaryKeySelective" parameterType="com.fc.test.model.auto.Punchclock" >
-    update punchclock
+    <update id="updateByPrimaryKeySelective" parameterType="com.fc.test.model.auto.Notification" >
+    update notification
     <set >
-                          <if test="studentNo != null" >
-        student_no = #{studentNo,jdbcType=VARCHAR},
+                          <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
       </if>
-                      <if test="studentName != null" >
-        student_name = #{studentName,jdbcType=VARCHAR},
+                      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-                      <if test="punchTime != null" >
-        punch_time = #{punchTime,jdbcType=VARCHAR},
+                      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
       </if>
-                      <if test="ip != null" >
-        ip = #{ip,jdbcType=VARCHAR},
-      </if>
-                      <if test="address != null" >
-        address = #{address,jdbcType=VARCHAR},
+                      <if test="permission != null" >
+        permission = #{permission,jdbcType=VARCHAR},
       </if>
               </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.fc.test.model.auto.Punchclock" >
-    update punchclock
+  <update id="updateByPrimaryKey" parameterType="com.fc.test.model.auto.Notification" >
+    update notification
     set 
-             	        	    	 			student_no = #{studentNo,jdbcType=VARCHAR}
-		     	        	    	 			student_name = #{studentName,jdbcType=VARCHAR}
-		     	        	    	 			punch_time = #{punchTime,jdbcType=VARCHAR}
-		     	        	    	 			ip = #{ip,jdbcType=VARCHAR}
-		     	        	    	 			address = #{address,jdbcType=VARCHAR}
+             	        	    	 			content = #{content,jdbcType=VARCHAR}
+		     	        	    	 			create_time = #{createTime,jdbcType=TIMESTAMP}
+		     	        	    	 			user_id = #{userId,jdbcType=VARCHAR}
+		     	        	    	 			permission = #{permission,jdbcType=VARCHAR}
 		     	        where id = #{id,jdbcType=VARCHAR}
   </update>
    </mapper>

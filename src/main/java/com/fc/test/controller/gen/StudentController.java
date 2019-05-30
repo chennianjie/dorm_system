@@ -1,5 +1,9 @@
 package com.fc.test.controller.gen;
 
+import com.fc.test.model.auto.*;
+import com.fc.test.service.ClassesService;
+import com.fc.test.service.CollegeService;
+import com.fc.test.util.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageInfo;
 import com.fc.test.common.base.BaseController;
 import com.fc.test.common.domain.AjaxResult;
-import com.fc.test.model.auto.Student;
 import com.fc.test.model.custom.TableSplitResult;
 import com.fc.test.model.custom.Tablepar;
 import com.fc.test.model.custom.TitleVo;
@@ -28,6 +31,10 @@ public class StudentController extends BaseController{
 	private String prefix = "admin/student";
 	@Autowired
 	private StudentService studentService;
+	@Autowired
+	private CollegeService collegeService;
+	@Autowired
+	private ClassesService classesService;
 	
 	@GetMapping("view")
 	@RequiresPermissions("gen:student:view")
@@ -42,12 +49,38 @@ public class StudentController extends BaseController{
 	@PostMapping("list")
 	@RequiresPermissions("gen:student:list")
 	@ResponseBody
-	public Object list(Tablepar tablepar,String searchTxt){
-		PageInfo<Student> page=studentService.list(tablepar,searchTxt) ; 
+	public Object list(Tablepar tablepar,String searchTxt,String sex, String departmentName, String bedroomName){
+		System.out.println(bedroomName);
+		StudentExample testExample=new StudentExample();
+		StudentExample.Criteria criteria = testExample.createCriteria();
+		if(StringUtils.isNotEmpty(searchTxt)){
+			criteria.andNameEqualTo(searchTxt);
+		}
+		if(StringUtils.isNotEmpty(sex)){
+			criteria.andSexEqualTo(sex);
+		}
+		if(StringUtils.isNotEmpty(departmentName)){
+			criteria.andSexEqualTo(departmentName);
+		}
+		if(StringUtils.isNotEmpty(bedroomName)){
+			criteria.andSexEqualTo(bedroomName);
+		}
+
+		PageInfo<Student> page=studentService.list(tablepar, testExample) ;
 		TableSplitResult<Student> result=new TableSplitResult<Student>(page.getPageNum(), page.getTotal(), page.getList()); 
 		return  result;
 	}
-	
+
+	@GetMapping("listByBedroomId/{id}")
+	@ResponseBody
+	public Object listNotAssignBed(@PathVariable String id){
+		StudentExample studentExample = new StudentExample();
+		studentExample.createCriteria().andBedIdIsNull();
+		return studentService.selectByExample(studentExample);
+	}
+
+
+
 	/**
      * 新增
      */
@@ -62,6 +95,10 @@ public class StudentController extends BaseController{
 	@RequiresPermissions("gen:student:add")
 	@ResponseBody
 	public AjaxResult add(Student student,Model model){
+		College college = collegeService.selectByPrimaryKey(student.getCollegeId());
+		student.setCollegeName(college.getName());
+		Classes classes = classesService.selectByPrimaryKey(student.getClassesId());
+		student.setClassesName(classes.getName());
 		int b=studentService.insertSelective(student);
 		if(b>0){
 			return success();

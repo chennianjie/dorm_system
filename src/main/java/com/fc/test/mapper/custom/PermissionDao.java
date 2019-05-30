@@ -3,7 +3,9 @@ package com.fc.test.mapper.custom;
 import java.util.List;
 
 import com.fc.test.model.auto.TsysPremission;
+import org.springframework.stereotype.Component;
 
+@Component
 public interface  PermissionDao {
 	/**
 	 * 查询全部权限 

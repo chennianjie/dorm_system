@@ -26,33 +26,21 @@
 					<div class="panel-body">
 						<form  class="form-horizontal m" id="form-add">
 													<div class="form-group">
-										<label class="col-sm-3 control-label ">寝室名称：</label>
+										<label class="col-sm-3 control-label ">学院名字：</label>
 										<div class="col-sm-8">
-											<input class="form-control" type="text" id="bedroomName" name="bedroomName"/>
+											<input class="form-control" type="text" id="name" name="name"/>
 										</div>
 									</div>
 															<div class="form-group">
-										<label class="col-sm-3 control-label ">人数（几人寝）：</label>
+										<label class="col-sm-3 control-label ">导员名字：</label>
 										<div class="col-sm-8">
-											<input class="form-control" type="text" id="peopleSumNum" name="peopleSumNum"/>
+											<input class="form-control" type="text" id="coacherName" name="coacherName"/>
 										</div>
 									</div>
 															<div class="form-group">
-										<label class="col-sm-3 control-label ">公寓名字：</label>
+										<label class="col-sm-3 control-label ">导员电话：</label>
 										<div class="col-sm-8">
-
-											<select class="form-control" id="departmentId" name="departmentId">
-												<option>==请选择==</option>
-											</select>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-sm-3 control-label ">所在楼层：</label>
-										<div class="col-sm-8">
-											<!--<input class="form-control" type="text" id="floor" name="floor"/>-->
-											<select class="form-control" id="floor" name="floor">
-
-											</select>
+											<input class="form-control" type="text" id="coacherCall" name="coacherCall"/>
 										</div>
 									</div>
 										<div class="form-group">
@@ -97,7 +85,7 @@ $(function(){
 	        initialDate:new Date(),
 	        minView: 1      
 	    });
-    initDepartmentSelect();
+	
 })
 
 
@@ -108,7 +96,7 @@ $("#form-add").validate({
 			minlength: 2,
 			maxlength: 20,
 			remote: {
-                url: rootPath + "/BedroomController/checkNameUnique",
+                url: rootPath + "/CollegeController/checkNameUnique",
                 type: "post",
                 dataType: "json",
                 dataFilter: function(data, type) {
@@ -131,54 +119,6 @@ $("#form-add").validate({
 });
 
 /**
- * 初始化添加寝室的公寓下拉列表
- */
-function initDepartmentSelect() {
-    $.ajax({
-        cache : true,
-        type : "POST",
-        url : rootPath + "/DepartmentController/list2",
-        async : false,
-        error : function(request) {
-            $.modal.alertError("系统错误");
-        },
-        success : function(data) {
-            var name,id,option;
-            var deparmentSel = $("#departmentId");
-			for (var i = 0; i < data.length; i++) {
-			    name = data[i].departmentName;
-			    id = data[i].id;
-				option = new Option(name, id)
-                deparmentSel.append(option);
-			}
-        }
-    });
-}
-
-$("#departmentId").change(function() {
-    $("#floor").empty();
-	var id = $("#departmentId").val();
-	console.log(id);
-    $.ajax({
-        cache : true,
-        type : "GET",
-        url : rootPath + "/DepartmentController/get/" + id,
-        async : false,
-        error : function(request) {
-            $.modal.alertError("系统错误");
-        },
-        success : function(data) {
-            var option;
-            var floor = $("#floor");
-            for (var i = 1; i <= data.floorNum; i++) {
-                option = new Option(i, i)
-                floor.append(option);
-            }
-        }
-    });
-});
-
-/**
  * 用户添加方法
  */
 function add() {
@@ -186,7 +126,7 @@ function add() {
 	$.ajax({
 		cache : true,
 		type : "POST",
-		url : rootPath + "/BedroomController/add",
+		url : rootPath + "/CollegeController/add",
 		data : dataFormJson,
 		async : false,
 		error : function(request) {

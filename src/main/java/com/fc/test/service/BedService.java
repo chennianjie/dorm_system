@@ -1,6 +1,8 @@
 package com.fc.test.service;
 
 import java.util.List;
+
+import com.fc.test.model.auto.Bedroom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
@@ -25,6 +27,8 @@ import com.fc.test.util.SnowflakeIdWorker;
 public class BedService implements BaseService<Bed, BedExample>{
 	@Autowired
 	private BedMapper bedMapper;
+	@Autowired
+	private BedroomService bedroomService;
 	
 	/**
 	 * 分页查询
@@ -48,6 +52,12 @@ public class BedService implements BaseService<Bed, BedExample>{
 		List<String> lista=Convert.toListStrArray(ids);
 		BedExample example=new BedExample();
 		example.createCriteria().andIdIn(lista);
+		return bedMapper.deleteByExample(example);
+	}
+
+	public int deleteBybedroomId(String bedroomId) {
+		BedExample example=new BedExample();
+		example.createCriteria().andBedroomIdEqualTo(bedroomId);
 		return bedMapper.deleteByExample(example);
 	}
 	

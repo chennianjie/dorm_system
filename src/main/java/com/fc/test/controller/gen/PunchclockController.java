@@ -1,6 +1,7 @@
 package com.fc.test.controller.gen;
 
 import com.fc.test.model.auto.Student;
+import com.fc.test.model.auto.StudentExample;
 import com.fc.test.model.auto.TsysUser;
 import com.fc.test.service.StudentService;
 import com.fc.test.util.PositionUtil;
@@ -34,6 +35,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("PunchclockController")
+@Api(value = "打卡")
 public class PunchclockController extends BaseController{
 	
 	private String prefix = "admin/punchclock";
@@ -148,6 +150,7 @@ public class PunchclockController extends BaseController{
 	 */
 	//上班departmentId
 	@PostMapping("/punch/")
+	@ResponseBody
 	public Object punchIn(String ipFrom3, String longi, String lati, String city, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		//取得当前用户名
 		TsysUser principal = (TsysUser) SecurityUtils.getSubject().getPrincipal();
@@ -165,7 +168,7 @@ public class PunchclockController extends BaseController{
 		if (!positionUtil.checkHereYesOrNotPunch(Double.parseDouble(longi), Double.parseDouble(lati), targetLon, targetLat)) {
 			map.put("result", resultTotal);
 			System.out.println("不在打卡范围内");
-			return error();
+			return error(-1,"不在打卡范围内");
 		}
 		//获取用户IP地址
 		String ip = request.getHeader("x-forwarded-for");
@@ -189,16 +192,22 @@ public class PunchclockController extends BaseController{
 			ip = ipFrom3;
 		}
 		//获取当前操作的用户
-		Student student = studentService.selectByPrimaryKey(studentId);
+		StudentExample studentExample = new StudentExample();
+		studentExample.createCriteria().andStudentNoEqualTo(principal.getUsername());
+		Student student = studentService.selectByExample(studentExample).get(0);
+		if (student == null) {
+			return error("当前用户不是学生");
+		}
 		//打卡控制
 		Punchclock punchClock = new Punchclock();
 		punchClock.setStudentNo(studentId);
 		punchClock.setStudentName(student.getName());
 		punchClock.setIp(ip);
 		punchClock.setAddress(city);
+//		punchClock.setPunchTime();
 		//先查询用户是否已经打过卡
 		if (punchclockService.checkIsPunchToday(studentId)) {
-			return error();
+			return error(1,"今天已经打过卡");
 		} else {
 			punchclockService.insertSelective(punchClock);
 			return success();

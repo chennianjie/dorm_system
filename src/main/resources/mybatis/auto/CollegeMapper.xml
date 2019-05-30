@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.fc.test.mapper.auto.PunchclockMapper">
-  <resultMap id="BaseResultMap" type="com.fc.test.model.auto.Punchclock" >
+<mapper namespace="com.fc.test.mapper.auto.CollegeMapper">
+  <resultMap id="BaseResultMap" type="com.fc.test.model.auto.College" >
     <result column="id" property="id" jdbcType="VARCHAR" />
-    <result column="student_no" property="studentNo" jdbcType="VARCHAR" />
-    <result column="student_name" property="studentName" jdbcType="VARCHAR" />
-    <result column="punch_time" property="punchTime" jdbcType="VARCHAR" />
-    <result column="ip" property="ip" jdbcType="VARCHAR" />
-    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="coacher_name" property="coacherName" jdbcType="VARCHAR" />
+    <result column="coacher_call" property="coacherCall" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,15 +66,15 @@
     </where>
   </sql>
 <sql id="Base_Column_List" >
-	id,student_no,student_name,punch_time,ip,address
+	id,name,coacher_name,coacher_call
 </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fc.test.model.auto.PunchclockExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fc.test.model.auto.CollegeExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from punchclock
+    from college
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -84,56 +82,42 @@
       order by ${orderByClause}
     </if>
   </select>
-
-  <select id="findToday" resultMap="BaseResultMap" parameterType="String" >
-    SELECT
-    <include refid="Base_Column_List" />
-  FROM punchclock
-  where student_no = #{studentId,jdbcType=VARCHAR}
-  and to_days(punch_time) = to_days(SYSDATE())
-  limit 1
-  </select>
-
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="String" >
     select 
     <include refid="Base_Column_List" />
-    from punchclock
+    from college
     where id = #{id,jdbcType=VARCHAR}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="String" >
-    delete from punchclock
+    delete from college
     where id = #{id,jdbcType=VARCHAR}
   </delete>
 
-  <delete id="deleteByExample" parameterType="com.fc.test.model.auto.PunchclockExample" >
-    delete from punchclock
+  <delete id="deleteByExample" parameterType="com.fc.test.model.auto.CollegeExample" >
+    delete from college
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   
-  <insert id="insert" parameterType="com.fc.test.model.auto.Punchclock" >
-    insert into punchclock (
+  <insert id="insert" parameterType="com.fc.test.model.auto.College" >
+    insert into college (
       	  	       id,
-       	  	       student_no,
-       	  	       student_name,
-       	  	       punch_time,
-       	  	       ip,
-       	  	    	  address
+       	  	       name,
+       	  	       coacher_name,
+       	  	    	  coacher_call
        	    )
     values (
 	  	  	      	#{id,jdbcType=VARCHAR},
-       	  	      	#{studentNo,jdbcType=VARCHAR},
-       	  	      	#{studentName,jdbcType=VARCHAR},
-       	  	      	#{punchTime,jdbcType=VARCHAR},
-       	  	      	#{ip,jdbcType=VARCHAR},
-       	  	    	  #{address,jdbcType=VARCHAR}
+       	  	      	#{name,jdbcType=VARCHAR},
+       	  	      	#{coacherName,jdbcType=VARCHAR},
+       	  	    	  #{coacherCall,jdbcType=VARCHAR}
        	    )
   </insert>
   
-  <insert id="insertSelective" parameterType="com.fc.test.model.auto.Punchclock" >
-    insert into punchclock
+  <insert id="insertSelective" parameterType="com.fc.test.model.auto.College" >
+    insert into college
     <trim prefix="(" suffix=")" suffixOverrides="," >
           
       <if test="id != null" >
@@ -141,28 +125,18 @@
       </if>
       
          
-      <if test="studentNo != null" >
-        student_no,
+      <if test="name != null" >
+        name,
       </if>
       
          
-      <if test="studentName != null" >
-        student_name,
+      <if test="coacherName != null" >
+        coacher_name,
       </if>
       
          
-
-        punch_time,
-
-      
-         
-      <if test="ip != null" >
-        ip,
-      </if>
-      
-         
-      <if test="address != null" >
-        address,
+      <if test="coacherCall != null" >
+        coacher_call,
       </if>
       
          </trim>
@@ -170,52 +144,39 @@
           <if test="id != null" >
         #{id,jdbcType=VARCHAR},
       </if>
-          <if test="studentNo != null" >
-        #{studentNo,jdbcType=VARCHAR},
+          <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
       </if>
-          <if test="studentName != null" >
-        #{studentName,jdbcType=VARCHAR},
+          <if test="coacherName != null" >
+        #{coacherName,jdbcType=VARCHAR},
       </if>
-          <if test="punchTime != null" >
-        #{punchTime,jdbcType=VARCHAR},
-      </if>
-        now(),
-          <if test="ip != null" >
-        #{ip,jdbcType=VARCHAR},
-      </if>
-          <if test="address != null" >
-        #{address,jdbcType=VARCHAR},
+          <if test="coacherCall != null" >
+        #{coacherCall,jdbcType=VARCHAR},
       </if>
         </trim>
   </insert>
   
-  <select id="countByExample" parameterType="com.fc.test.model.auto.PunchclockExample" resultType="String" >
-    select count(*) from punchclock
+  <select id="countByExample" parameterType="com.fc.test.model.auto.CollegeExample" resultType="String" >
+    select count(*) from college
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   
   <update id="updateByExampleSelective" parameterType="map" >
-    update punchclock
+    update college
     <set >
           <if test="record.id != null" >
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-          <if test="record.studentNo != null" >
-        student_no = #{record.studentNo,jdbcType=VARCHAR},
+          <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
       </if>
-          <if test="record.studentName != null" >
-        student_name = #{record.studentName,jdbcType=VARCHAR},
+          <if test="record.coacherName != null" >
+        coacher_name = #{record.coacherName,jdbcType=VARCHAR},
       </if>
-          <if test="record.punchTime != null" >
-        punch_time = #{record.punchTime,jdbcType=VARCHAR},
-      </if>
-          <if test="record.ip != null" >
-        ip = #{record.ip,jdbcType=VARCHAR},
-      </if>
-          <if test="record.address != null" >
-        address = #{record.address,jdbcType=VARCHAR},
+          <if test="record.coacherCall != null" >
+        coacher_call = #{record.coacherCall,jdbcType=VARCHAR},
       </if>
          
     </set>
@@ -226,55 +187,43 @@
   
   
   <update id="updateByExample" parameterType="map" >
-    update punchclock
+    update college
     set
             	     	 id = #{record.id,jdbcType=VARCHAR},
     	       
-        	     	 student_no = #{record.studentNo,jdbcType=VARCHAR},
+        	     	 name = #{record.name,jdbcType=VARCHAR},
     	       
-        	     	 student_name = #{record.studentName,jdbcType=VARCHAR},
+        	     	 coacher_name = #{record.coacherName,jdbcType=VARCHAR},
     	       
-        	     	 punch_time = #{record.punchTime,jdbcType=VARCHAR},
-    	       
-        	     	 ip = #{record.ip,jdbcType=VARCHAR},
-    	       
-        	     	 address = #{record.address,jdbcType=VARCHAR},
+        	     	 coacher_call = #{record.coacherCall,jdbcType=VARCHAR},
     	       
         <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   
-    <update id="updateByPrimaryKeySelective" parameterType="com.fc.test.model.auto.Punchclock" >
-    update punchclock
+    <update id="updateByPrimaryKeySelective" parameterType="com.fc.test.model.auto.College" >
+    update college
     <set >
-                          <if test="studentNo != null" >
-        student_no = #{studentNo,jdbcType=VARCHAR},
+                          <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
       </if>
-                      <if test="studentName != null" >
-        student_name = #{studentName,jdbcType=VARCHAR},
+                      <if test="coacherName != null" >
+        coacher_name = #{coacherName,jdbcType=VARCHAR},
       </if>
-                      <if test="punchTime != null" >
-        punch_time = #{punchTime,jdbcType=VARCHAR},
-      </if>
-                      <if test="ip != null" >
-        ip = #{ip,jdbcType=VARCHAR},
-      </if>
-                      <if test="address != null" >
-        address = #{address,jdbcType=VARCHAR},
+                      <if test="coacherCall != null" >
+        coacher_call = #{coacherCall,jdbcType=VARCHAR},
       </if>
               </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.fc.test.model.auto.Punchclock" >
-    update punchclock
+  <update id="updateByPrimaryKey" parameterType="com.fc.test.model.auto.College" >
+    update college
     set 
-             	        	    	 			student_no = #{studentNo,jdbcType=VARCHAR}
-		     	        	    	 			student_name = #{studentName,jdbcType=VARCHAR}
-		     	        	    	 			punch_time = #{punchTime,jdbcType=VARCHAR}
-		     	        	    	 			ip = #{ip,jdbcType=VARCHAR}
-		     	        	    	 			address = #{address,jdbcType=VARCHAR}
+             	        	    	 			name = #{name,jdbcType=VARCHAR}
+		     	        	    	 			coacher_name = #{coacherName,jdbcType=VARCHAR}
+		     	        	    	 			coacher_call = #{coacherCall,jdbcType=VARCHAR}
 		     	        where id = #{id,jdbcType=VARCHAR}
   </update>
    </mapper>

@@ -49,10 +49,19 @@ public class Bed implements Serializable {
 	 * 公寓名字
 	 */
 		private String departmentName;
-	
-	
-			
-		public String getId() {
+
+		//学号  业务需要
+		private String studentNo;
+
+	public String getStudentNo() {
+		return studentNo;
+	}
+
+	public void setStudentNo(String studentNo) {
+		this.studentNo = studentNo;
+	}
+
+	public String getId() {
 	        return id;
 	    }
 	

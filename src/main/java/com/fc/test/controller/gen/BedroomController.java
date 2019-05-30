@@ -68,7 +68,16 @@ public class BedroomController extends BaseController{
         bedroomExample.createCriteria().andDepartmentIdEqualTo(id);
         return bedroomService.selectByExample(bedroomExample);
     }
-	
+
+	@GetMapping("listByDepartmentIdAndNotFull/{id}")
+	@ResponseBody
+	public Object listByDepartmentIdAndNotFull(@PathVariable String id){
+		BedroomExample bedroomExample = new BedroomExample();
+		bedroomExample.createCriteria().andDepartmentIdEqualTo(id).andBedroomNotFull();
+		return bedroomService.selectByExample(bedroomExample);
+	}
+
+
 	/**
      * 新增
      */

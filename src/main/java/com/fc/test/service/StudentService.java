@@ -30,15 +30,16 @@ public class StudentService implements BaseService<Student, StudentExample>{
 	 * 分页查询
 	 * @return
 	 */
-	 public PageInfo<Student> list(Tablepar tablepar,String name){
-	        StudentExample testExample=new StudentExample();
+	 public PageInfo<Student> list(Tablepar tablepar, StudentExample testExample){
 	        testExample.setOrderByClause("id ASC");
-	        if(name!=null&&!"".equals(name)){
-	        	testExample.createCriteria().andNameLike("%"+name+"%");
-	        }
+
 
 	        PageHelper.startPage(tablepar.getPageNum(), tablepar.getPageSize());
 	        List<Student> list= studentMapper.selectByExample(testExample);
+	        //给Student中的宿舍信息赋值
+	        for (Student student : list) {
+
+			}
 	        PageInfo<Student> pageInfo = new PageInfo<Student>(list);
 	        return  pageInfo;
 	 }
@@ -64,6 +65,12 @@ public class StudentService implements BaseService<Student, StudentExample>{
 	public Student selectByPrimaryKey(String id) {
 		
 		return studentMapper.selectByPrimaryKey(id);
+	}
+
+	public Student selectByStudentNo(String studentNo) {
+		StudentExample example=new StudentExample();
+		example.createCriteria().andStudentNoEqualTo(studentNo);
+		return selectByExample(example).get(0);
 	}
 
 	

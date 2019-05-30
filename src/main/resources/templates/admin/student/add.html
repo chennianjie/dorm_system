@@ -34,7 +34,11 @@
 															<div class="form-group">
 										<label class="col-sm-3 control-label ">性别：</label>
 										<div class="col-sm-8">
-											<input class="form-control" type="text" id="sex" name="sex"/>
+											<!--<input class="form-control" type="text" id="sex" name="sex"/>-->
+											<select class="form-control" id="sex" name="sex">
+												<option value="男">男</option>
+												<option value="女">女</option>
+											</select>
 										</div>
 									</div>
 															<div class="form-group">
@@ -50,33 +54,16 @@
 										</div>
 									</div>
 															<div class="form-group">
-										<label class="col-sm-3 control-label ">学院id：</label>
-										<div class="col-sm-8">
-											<input class="form-control" type="text" id="collegeId" name="collegeId"/>
-										</div>
-									</div>
-															<div class="form-group">
 										<label class="col-sm-3 control-label ">所属学院名：</label>
 										<div class="col-sm-8">
-											<input class="form-control" type="text" id="collegeName" name="collegeName"/>
-										</div>
-									</div>
-															<div class="form-group">
-										<label class="col-sm-3 control-label ">班级id：</label>
-										<div class="col-sm-8">
-											<input class="form-control" type="text" id="classesId" name="classesId"/>
+											<select class="form-control"  id="collegeId" name="collegeId"></select>
 										</div>
 									</div>
 															<div class="form-group">
 										<label class="col-sm-3 control-label ">所在班级名称：</label>
 										<div class="col-sm-8">
-											<input class="form-control" type="text" id="classesName" name="classesName"/>
-										</div>
-									</div>
-															<div class="form-group">
-										<label class="col-sm-3 control-label ">是否分配床位，为空表示未分配：</label>
-										<div class="col-sm-8">
-											<input class="form-control" type="text" id="bedId" name="bedId"/>
+											<select class="form-control"  id="classesId" name="classesId"></select>
+											<!--<input class="form-control" type="text" id="classesName" name="classesName"/>-->
 										</div>
 									</div>
 										<div class="form-group">
@@ -121,8 +108,62 @@ $(function(){
 	        initialDate:new Date(),
 	        minView: 1      
 	    });
-	
+    initCollege();
 })
+
+/**
+ * 初始化学院下拉列表
+ */
+function initCollege(){
+    $("#collegeId").empty();
+    $.ajax({
+        cache : true,
+        type : "POST",
+        url : rootPath + "/CollegeController/list2",
+        async : false,
+        error : function(request) {
+            $.modal.alertError("系统错误");
+        },
+        success : function(data) {
+            var name,id,option;
+            var deparmentSel = $("#collegeId");
+            for (var i = 0; i < data.length; i++) {
+                name = data[i].name;
+                id = data[i].id;
+                option = new Option(name, id)
+                deparmentSel.append(option);
+            }
+        }
+    });
+}
+
+/**
+ * 级联初始化为班级下拉
+ */
+$("#collegeId").change(function() {
+    $("#classesId").empty();
+    var id = $("#collegeId").val();
+    console.log(id);
+    $.ajax({
+        cache : true,
+        type : "POST",
+        url : rootPath + "/ClassesController/listByCollegeId/" + id,
+        async : false,
+        error : function(request) {
+            $.modal.alertError("系统错误");
+        },
+        success : function(data) {
+            var name,id,option;
+            var bedroomSel = $("#classesId");
+            for (var i = 0; i < data.length; i++) {
+                name = data[i].name;
+                id = data[i].id;
+                option = new Option(name, id)
+                bedroomSel.append(option);
+            }
+        }
+    });
+});
 
 
 $("#form-add").validate({

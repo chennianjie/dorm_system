@@ -1,6 +1,8 @@
 package com.fc.test.service;
 
 import java.util.List;
+
+import com.fc.test.model.auto.Bed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
@@ -25,7 +27,8 @@ import com.fc.test.util.SnowflakeIdWorker;
 public class BedroomService implements BaseService<Bedroom, BedroomExample>{
 	@Autowired
 	private BedroomMapper bedroomMapper;
-	
+	@Autowired
+	private BedService bedService;
 	/**
 	 * 分页查询
 	 * @return
@@ -46,6 +49,9 @@ public class BedroomService implements BaseService<Bedroom, BedroomExample>{
 	@Override
 	public int deleteByPrimaryKey(String ids) {
 		List<String> lista=Convert.toListStrArray(ids);
+		for (String id : lista) {
+			bedService.deleteBybedroomId(id);
+		}
 		BedroomExample example=new BedroomExample();
 		example.createCriteria().andIdIn(lista);
 		return bedroomMapper.deleteByExample(example);
@@ -112,8 +118,14 @@ public class BedroomService implements BaseService<Bedroom, BedroomExample>{
 	
 	@Override
 	public int deleteByExample(BedroomExample example) {
-		
 		return bedroomMapper.deleteByExample(example);
+	}
+
+	public void updatePeopleCurNumWhenAssign(String bedroomId){
+		Bedroom bedroom = selectByPrimaryKey(bedroomId);
+		bedroom.setPeopleCurNum(Integer.parseInt(bedroom.getPeopleCurNum())+1+"");
+		//添加一个床位信息需要
+		updateByPrimaryKeySelective(bedroom);
 	}
 	
 	/**

@@ -62,23 +62,7 @@
                                     <form role="form" class="form-inline">
                                         <div class="form-group">
                                             <label for="exampleInputEmail2" class="sr-only">搜索名字</label>
-                                            <input id="exampleInputEmail2" type="text" name="searchTxt" placeholder="搜索名字"class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <select id="sexSelect" type="" name="sex" class="form-control">
-                                                <option value="">性别</option>
-                                                <option value="男">男</option>
-                                                <option value="女">女</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <select id="departmentNameSelect" type="" name="departmentName" class="form-control">
-
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail" class="sr-only">搜索宿舍名</label>
-                                            <input id="exampleInputEmail" type="text" name="bedroomName" placeholder="搜索宿舍名"class="form-control">
+                                            <input type="text" name="searchTxt" placeholder="搜索名字"class="form-control">
                                         </div>
                                         <button onclick="$.table.search(this)" class="btn btn-success" type="button"><i class="fa fa-search"></i>&nbsp;搜索</button>
                                     </form>
@@ -169,11 +153,11 @@
 <!-- jquery-export 表格导出插件 -->
 
 <!-- 导出 -->
-var dataUrl=window.rootPath+"/StudentController/list";
-var removeUrl=window.rootPath+"/StudentController/remove";
-var createUrl=window.rootPath+"/StudentController/add";
-var updateUrl=window.rootPath+"/StudentController/edit/{id}";
-var exportUrl=window.rootPath+"/StudentController/export";
+var dataUrl=window.rootPath+"/CollegeController/list";
+var removeUrl=window.rootPath+"/CollegeController/remove";
+var createUrl=window.rootPath+"/CollegeController/add";
+var updateUrl=window.rootPath+"/CollegeController/edit/{id}";
+var exportUrl=window.rootPath+"/CollegeController/export";
   var options = {
 		dataUrl: dataUrl,
         createUrl: createUrl,
@@ -181,7 +165,7 @@ var exportUrl=window.rootPath+"/StudentController/export";
         removeUrl:removeUrl,
         exportUrl: exportUrl,
         sortName: "roleSort",
-        modalName: "学生",
+        modalName: "学院",
         search: false,
 	   dataColumns: [
 			{
@@ -193,39 +177,15 @@ var exportUrl=window.rootPath+"/StudentController/export";
 			},
 			{
 			    field: 'name',
-			    title: '学生名字'
+			    title: '学院名字'
 			},
 			{
-			    field: 'sex',
-			    title: '性别'
+			    field: 'coacherName',
+			    title: '导员名字'
 			},
 			{
-			    field: 'telNo',
-			    title: '电话'
-			},
-			{
-			    field: 'studentNo',
-			    title: '学号'
-			},
-			{
-			    field: 'collegeName',
-			    title: '所属学院名'
-			},
-			{
-			    field: 'classesName',
-			    title: '所在班级名称'
-			},
-			{
-			    field: 'bedNum',
-			    title: '床位号'
-			},
-			{
-			    field: 'bedroomName',
-			    title: '宿舍'
-			},
-			{
-			    field: 'departmentName',
-			    title: '公寓'
+			    field: 'coacherCall',
+			    title: '导员电话'
 			},
 
 /*	
@@ -260,33 +220,7 @@ var exportUrl=window.rootPath+"/StudentController/export";
 $(function(){
 	var oTab=$.table.oTableInit(options);
 	oTab.Init();
-    initDepartmentSelect();
 })
-
-/**
- * 初始化公寓下拉列表
- */
-function initDepartmentSelect() {
-    $.ajax({
-        cache : true,
-        type : "POST",
-        url : rootPath + "/DepartmentController/list2",
-        async : false,
-        error : function(request) {
-            $.modal.alertError("系统错误");
-        },
-        success : function(data) {
-            var name,id,option;
-            var deparmentSel = $("#departmentNameSelect");
-            for (var i = 0; i < data.length; i++) {
-                name = data[i].departmentName;
-                id = data[i].id;
-                option = new Option(name, name)
-                deparmentSel.append(option);
-            }
-        }
-    });
-}
 </script>
 
 </body>
