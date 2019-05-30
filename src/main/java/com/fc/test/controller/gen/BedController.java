@@ -70,6 +70,13 @@ public class BedController extends BaseController{
 		bedExample.createCriteria().andBedroomIdEqualTo(id);
 		return bedService.selectByExample(bedExample);
 	}
+	@GetMapping("listByBedroomIdAndEmpty/{id}")
+	@ResponseBody
+	public Object listByBedroomIdAndEmpty(@PathVariable String id){
+		BedExample bedExample = new BedExample();
+		bedExample.createCriteria().andBedroomIdEqualTo(id).andEmptyIsNull();
+		return bedService.selectByExample(bedExample);
+	}
 
 
 

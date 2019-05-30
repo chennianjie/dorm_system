@@ -132,6 +132,9 @@ function initCollege(){
                 id = data[i].id;
                 option = new Option(name, id)
                 deparmentSel.append(option);
+                if (i == 0){
+                    option.selected;
+				}
             }
         }
     });
@@ -160,6 +163,9 @@ $("#collegeId").change(function() {
                 id = data[i].id;
                 option = new Option(name, id)
                 bedroomSel.append(option);
+                if (i == 0){
+                    option.selected;
+                }
             }
         }
     });

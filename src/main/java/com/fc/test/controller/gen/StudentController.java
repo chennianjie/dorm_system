@@ -60,10 +60,10 @@ public class StudentController extends BaseController{
 			criteria.andSexEqualTo(sex);
 		}
 		if(StringUtils.isNotEmpty(departmentName)){
-			criteria.andSexEqualTo(departmentName);
+			criteria.andDepartmentNameEqualTo(departmentName);
 		}
 		if(StringUtils.isNotEmpty(bedroomName)){
-			criteria.andSexEqualTo(bedroomName);
+			criteria.andBedroomNameEqualTo(bedroomName);
 		}
 
 		PageInfo<Student> page=studentService.list(tablepar, testExample) ;
@@ -71,9 +71,9 @@ public class StudentController extends BaseController{
 		return  result;
 	}
 
-	@GetMapping("listByBedroomId/{id}")
+	@GetMapping("listByBedroomId")
 	@ResponseBody
-	public Object listNotAssignBed(@PathVariable String id){
+	public Object listNotAssignBed(){
 		StudentExample studentExample = new StudentExample();
 		studentExample.createCriteria().andBedIdIsNull();
 		return studentService.selectByExample(studentExample);
